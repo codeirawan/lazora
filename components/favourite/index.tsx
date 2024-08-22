@@ -1,0 +1,178 @@
+import { Heart, HeartOff } from "lucide-react"
+import CustomTooltip from "../custom-tooltip"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { useState } from "react"
+import {
+  FavouriteProps,
+  removeFavourite,
+  resetFavourite,
+} from "@/redux/features/favourite/favourite-slice"
+import { Button } from "../ui/button"
+import { useDispatch, useSelector } from "react-redux"
+import { RootState } from "@/redux/store"
+import Link from "next/link"
+import { Card } from "../ui/card"
+import { formatTitleProduct } from "@/utils/format-title-product"
+import Image from "next/image"
+import Balancer from "react-wrap-balancer"
+import { formatToIDR } from "@/utils/format-to-idr"
+import { toast } from "../ui/use-toast"
+import { addToCart } from "@/redux/features/cart/cart-slice"
+import { useMounted } from "@/hook/use-mounted"
+import { Dispatch, UnknownAction } from "@reduxjs/toolkit"
+import DynamicButton from "../buttons/dynamic-button"
+
+const Favourite = () => {
+  const { favourites } = useSelector((state: RootState) => state.favourites)
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const dispatch = useDispatch()
+  const { isMounted } = useMounted()
+
+  const closeSheet = () => {
+    setIsOpen(false)
+  }
+
+  if (!isMounted) return <DynamicButton type="favourite" totalItems={0} />
+
+  return (
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+      <SheetTrigger aria-label="favourite button">
+        <DynamicButton type="favourite" totalItems={favourites.length} />
+      </SheetTrigger>
+      <SheetContent
+        side="right"
+        className="flex flex-col justify-between gap-4 p-4"
+      >
+        <h3 className="text-xl font-semibold capitalize">
+          favourites ({favourites.length})
+        </h3>
+        <div className="sheet_scrollbar relative flex w-full flex-1 flex-col gap-4 overflow-y-auto pr-2">
+          {favourites.length > 0 ? (
+            favourites?.map((favourite) => {
+              return (
+                <FavouriteCard
+                  key={favourite.id}
+                  dispatch={dispatch}
+                  closeSheet={closeSheet}
+                  {...favourite}
+                />
+              )
+            })
+          ) : (
+            <div className="absolute left-1/2 top-1/2 flex w-full -translate-x-1/2 -translate-y-1/2 flex-col items-center">
+              <HeartOff className="mb-3 size-20 stroke-[1.5] text-secondary-foreground/30" />
+              <h5 className="mb-1 text-lg font-medium">Belum ada items</h5>
+              <p className="w-4/5 text-center text-sm text-muted-foreground">
+                Tandai product yang kamu suka dengan click tombol hati
+              </p>
+            </div>
+          )}
+        </div>
+        <div className="flex h-max w-full flex-col gap-3 pb-2">
+          <Link href="/account/favourites">
+            <Button className="shimmer w-full">
+              View All ({favourites.length})
+            </Button>
+          </Link>
+          <div className="flex w-full items-center justify-center">
+            <Button
+              disabled={favourites.length <= 0}
+              onClick={() => dispatch(resetFavourite())}
+              variant="link"
+              className="size-max py-0 text-xs capitalize text-muted-foreground hover:text-red-500"
+            >
+              Remove All
+            </Button>
+          </div>
+        </div>
+      </SheetContent>
+    </Sheet>
+  )
+}
+
+export default Favourite
+
+type FavouriteCardProps = {
+  closeSheet: () => void
+  dispatch: Dispatch<UnknownAction>
+} & FavouriteProps
+
+const FavouriteCard = ({
+  id,
+  title,
+  image,
+  price,
+  stock,
+  dispatch,
+  closeSheet,
+}: FavouriteCardProps) => {
+  const handleRemoveFavourite = () => {
+    dispatch(removeFavourite(id))
+    toast({
+      title: "Product di hapus dari favourite",
+    })
+  }
+
+  const handleAddToCart = () => {
+    // dispatch(
+    //   addToCart({
+    //     id: id,
+    //     title: title,
+    //     image: image,
+    //     price: price,
+    //     stock: stock,
+    //     qty: 1,
+    //   }),
+    // )
+    // toast({
+    //   title: "product ditambahkan ke cart",
+    // })
+    toast({
+      title: "building process...",
+    })
+  }
+
+  return (
+    <Card className="flex h-max gap-3 p-2 transition-all hover:bg-secondary">
+      <Link
+        href={`/p/${formatTitleProduct(title ?? "")}/${id}`}
+        onClick={closeSheet}
+        className="shimmer size-16 border"
+      >
+        <Image
+          src={image ?? ""}
+          alt={title ?? ""}
+          width={150}
+          height={150}
+          className="size-full object-scale-down object-center"
+        />
+      </Link>
+      <div className="flex flex-col gap-1">
+        <Link
+          href={`/p/${formatTitleProduct(title ?? "")}/${id}`}
+          onClick={closeSheet}
+          className="text-sm font-medium"
+        >
+          <Balancer>{title?.slice(0, 30) + "..."}</Balancer>
+        </Link>
+        <p className="text-xs">{formatToIDR(price ?? 0)}</p>
+        <div className="flex items-center gap-2.5">
+          <Button
+            variant="link"
+            className="p-0 text-xs text-red-500"
+            onClick={handleRemoveFavourite}
+          >
+            Remove
+          </Button>
+          <Button
+            variant="link"
+            className="hover p-0 text-xs"
+            onClick={handleAddToCart}
+          >
+            Add to cart
+          </Button>
+        </div>
+      </div>
+    </Card>
+  )
+}

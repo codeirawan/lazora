@@ -1,0 +1,192 @@
+@tailwind base;
+  @tailwind components;
+  @tailwind utilities;
+
+  @layer base {
+    :root {
+      --main: 347.62 100% 56.27%;
+      --background: 0 0% 100%;
+      --foreground: 240 10% 3.9%;
+
+      --card: 0 0% 100%;
+      --card-foreground: 0 0% 6.67%;
+
+      --popover: 0 0% 100%;
+      --popover-foreground: 240 10% 3.9%;
+
+      --primary: 0 0% 6.67%;
+      --primary-foreground: 0 0% 98%;
+
+      --secondary: 0, 0%, 96.08%;
+      --secondary-foreground: 0 0% 6.67%;
+
+      --muted: 0, 0%, 96.08%;
+      --muted-foreground: 240 3.8% 46.1%;
+
+      --accent: 0, 0%, 96.08%;
+      --accent-foreground: 0 0% 6.67%;
+
+      --destructive: 0 84.2% 60.2%;
+      --destructive-foreground: 0 0% 98%;
+
+      --border: 240 5.9% 90%;
+      --input: 240 5.9% 90%;
+      --ring: 240 10% 3.9%;
+
+      --radius: 0.5rem;
+    }
+
+    .dark {
+      --background: 240 10% 3.9%;
+      --foreground: 0 0% 98%;
+
+      --card: 240 10% 3.9%;
+      --card-foreground: 0 0% 98%;
+
+      --popover: 240 10% 3.9%;
+      --popover-foreground: 0 0% 98%;
+
+      --primary: 0 0% 98%;
+      --primary-foreground: 240 5.9% 10%;
+
+      --secondary: 240 3.7% 15.9%;
+      --secondary-foreground: 0 0% 98%;
+
+      --muted: 240 3.7% 15.9%;
+      --muted-foreground: 240 5% 64.9%;
+
+      --accent: 240 3.7% 15.9%;
+      --accent-foreground: 0 0% 98%;
+
+      --destructive: 0 62.8% 30.6%;
+      --destructive-foreground: 0 0% 98%;
+
+      --border: 240 3.7% 15.9%;
+      --input: 240 3.7% 15.9%;
+      --ring: 240 4.9% 83.9%;
+    }
+  }
+
+  @layer base {
+    * {
+      @apply border-border;
+    }
+
+    html::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+
+    html {
+      scrollbar-width: none;
+      scroll-behavior: smooth !important;
+    }
+    
+    body {
+      @apply bg-background text-foreground;
+    }
+  }
+
+  @font-face {
+    font-family: "canelaThin";
+    src: local('canelaThin'),url("../font/Canela-Thin.otf") format("opentype");
+  }
+
+  @font-face {
+    font-family: "canelaLight";
+    src: local('canelaLight'),url("../font/Canela-Light.otf") format("opentype");
+  }
+
+  @font-face {
+    font-family: "canelaRegular";
+    src: local('canelaRegular'),url("../font/Canela-Regular.otf") format("opentype");
+  }
+
+
+.shimmer {
+  position: relative;
+  overflow: hidden
+}
+
+.shimmer:hover::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: translateX(-100%);
+  background-image: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1), transparent);
+  animation: loading 2.5s infinite;
+}
+
+@keyframes loading {
+  100% {
+    transform: translateX(100%)
+  }
+}
+
+.result__search::-webkit-scrollbar {
+  width: 8px;
+}
+
+.result__search::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.result__search::-webkit-scrollbar-thumb {
+  background-color: #e4e4e7;
+  border-radius: 40px;
+}
+
+.categories_scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.categories_scrollbar::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.categories_scrollbar::-webkit-scrollbar-thumb {
+  background-color: #e4e4e7;
+  border-radius: 40px;
+}
+
+.sheet_scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sheet_scrollbar::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.sheet_scrollbar::-webkit-scrollbar-thumb {
+  background-color: #e4e4e7;
+  border-radius: 40px;
+}
+
+.scrollY::-webkit-scrollbar {
+  width: 10px;
+}
+
+.scrollY::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.scrollY::-webkit-scrollbar-thumb {
+  background-color: #e4e4e7;
+  border-radius: 40px;
+}
+
+.scrollX::-webkit-scrollbar {
+  height: 8px;
+}
+
+.scrollX::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.scrollX::-webkit-scrollbar-thumb {
+  background-color: #e4e4e7;
+  border-radius: 40px;
+}
